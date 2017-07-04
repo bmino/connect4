@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Connect 4</title>
+    <link rel="stylesheet" href="style/canvas.css">
+</head>
+<body>
+    <!-- Canvas -->
+    <canvas id="master-canvas" width="600" height="600"></canvas>
+
+
+
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/bmDraw.js"></script>
+    <script type="text/javascript">
+        /* Connect to socket.io */
+        var socket = io();
+
+        var canvas = document.getElementById("master-canvas");
+        var ctx = canvas.getContext("2d");
+
+        /* Draws Board Grid */
+        bmDraw.init(canvas, ctx);
+        bmDraw.mark(0,0);
+    </script>
+</body>
+</html>

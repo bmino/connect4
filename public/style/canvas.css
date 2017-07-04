@@ -1,0 +1,8 @@
+#master-canvas {
+    border: 1px solid black;
+
+    /* Centering */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
