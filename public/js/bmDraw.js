@@ -4,61 +4,61 @@ var bmDraw = {
     ctx: null,
 
     grid: {
-        thickness: 0,
         cols: {
-            size: 0,
-            count: 0
+            count: 0,
+            width: 0,
+            border: 0
         },
         rows: {
-            size: 0,
-            count: 0
+            count: 0,
+            width: 0,
+            border: 0
         }
     },
 
     init: function (canvas, ctx) {
         this.canvas = canvas;
         this.ctx = ctx;
-        this.drawGrid(3, 3, 3);
+        this.grid.cols.border = 3;
+        this.grid.rows.border = 3;
+        this.drawGrid(3, 3);
     },
 
-    drawGrid: function (cols, rows, gridSize) {
-        this.grid.thickness = gridSize;
-        this.grid.cols.count = cols;
-        this.grid.rows.count = rows;
-        this.grid.cols.size = this.canvas.scrollWidth;
-        this.grid.rows.size = this.canvas.scrollHeight;
-
-        var x = 0;
-        var y = 0;
+    drawGrid: function (cols, rows) {
         var width = this.canvas.scrollWidth;
         var height = this.canvas.scrollHeight;
 
-        this.grid.cols.size = (width - ((cols-1) * gridSize)) / cols;
-        this.debug && console.log('grid.cols.size: ' + this.grid.cols.size);
+        this.grid.cols.count = cols;
+        this.grid.cols.width = (width - ((cols-1) * this.grid.cols.border)) / cols;
+        this.debugger('grid.cols.width: ' + this.grid.cols.width);
 
-        this.grid.rows.size = (height - ((rows-1) * gridSize)) / rows;
-        this.debug && console.log('grid.rows.size: ' + this.grid.rows.size);
+        this.grid.rows.count = rows;
+        this.grid.rows.height = (height - ((rows-1) * this.grid.rows.border)) / rows;
+        this.debugger('grid.rows.height: ' + this.grid.rows.height);
 
-
+        var x = 0;
         for (var i=0; i<cols-1; i++) {
-            x += this.grid.cols.size;
-            ctx.fillRect(x, 0, gridSize, height);
+            x += this.grid.cols.width;
+            ctx.fillRect(x, 0, this.grid.cols.border, height);
+            x += this.grid.cols.border;
         }
 
-        for (var i=0; i<rows-1; i++) {
-            y += this.grid.rows.size;
-            ctx.fillRect(0, y, width, gridSize);
+        var y = 0;
+        for (var j=0; j<rows-1; j++) {
+            y += this.grid.rows.height;
+            ctx.fillRect(0, y, width, this.grid.rows.border);
+            y += this.grid.rows.border;
         }
     },
 
     mark: function(col, row) {
         var originalColor = this.ctx.fillStyle;
         var corner = this.getCorner(col, row);
-        var width = this.grid.cols.size - this.grid.thickness;
-        var height = this.grid.rows.size - this.grid.thickness;
-        this.debug && console.log('marking corner: ', corner);
-        this.debug && console.log('marking width: ' + width);
-        this.debug && console.log('marking height: ' + height);
+        var width = this.grid.cols.width;
+        var height = this.grid.rows.height;
+        this.debugger('marking corner: (' + corner.x + ', ' + corner.y + ')');
+        this.debugger('marking width: ' + width);
+        this.debugger('marking height: ' + height);
 
         this.ctx.fillStyle = '#EE0000';
         this.ctx.fillRect(corner.x, corner.y, width, height);
@@ -66,12 +66,17 @@ var bmDraw = {
     },
 
     getCorner: function (col, row) {
-        var border = this.grid.thickness;
-        var x = (border * col) + (this.grid.cols.size * col);
-        var y = (border * row) + (this.grid.rows.size * row);
+        var x = (this.grid.cols.width * col);
+        x += this.grid.cols.border * (col);
+        var y = (this.grid.rows.height * row);
+        y += this.grid.rows.border * (row);
         return {
             x: x,
             y: y
         };
+    },
+
+    debugger: function(msg) {
+        this.debug && console.log(msg);
     }
 };
