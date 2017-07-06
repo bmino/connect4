@@ -28,13 +28,15 @@
             console.log('created new game id ' + game.id);
             gameState.id = game.id;
             gameState.status = 'SEARCHING_FOR_OPPONENT';
-            setupBoard();
         });
 
         socket.on('game:join', function(game) {
             console.log('joined existing game id ' + game.id);
             gameState.id = game.id;
             gameState.status = 'MIGHT_BE_YOUR_MOVE';
+        });
+
+        socket.on('game:begin', function() {
             setupBoard();
         });
 
