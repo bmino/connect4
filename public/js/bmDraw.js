@@ -61,7 +61,7 @@ var bmDraw = {
         }
     },
 
-    mark: function(col, row) {
+    mark: function(col, row, color) {
         var originalColor = this.ctx.fillStyle;
         var corner = this.getCorner(col, row);
         var width = this.grid.cols.width;
@@ -70,7 +70,7 @@ var bmDraw = {
         this.debugger('marking width: ' + width);
         this.debugger('marking height: ' + height);
 
-        this.ctx.fillStyle = '#EE0000';
+        this.ctx.fillStyle = color || '#EE0000';
         this.ctx.fillRect(corner.x, corner.y, width, height);
         this.ctx.fillStyle = originalColor;
 

@@ -63,8 +63,11 @@
             /* Draws Board Grid */
             bmDraw.init(canvas, ctx, 3);
 
-            socket.on('move:draw', function(move) {
-                bmDraw.mark(move.col, move.row);
+            socket.on('move:draw:native', function(move) {
+                bmDraw.mark(move.col, move.row, '#0000EE');
+            });
+            socket.on('move:draw:foreign', function(move) {
+                bmDraw.mark(move.col, move.row, '#EE0000');
             });
 
             canvas.addEventListener('click', canvasClick, false);
