@@ -1,23 +1,34 @@
 var KeyGen = require('./KeyGen.js');
 
 var Move = {
-    make: function(move, game) {
 
+    createBoard: function() {
+        return [[], [], []];
+    },
+
+    make: function(move, game, socketId) {
         // Invalid game id
         if (!game) {
             console.log('Err:move - could not find game id ' + game.id);
-            return;
+            return false;
         }
+        if (game.id !== move.game) {
+            console.log('Err:move somehow the move is for another game');
+            return false;
+        }
+        // TODO: Wrong turn
+
         // Space is already been taken
-        if (game.grid[move.col][move.row]) {
+        if (game.board[move.col][move.row] !== undefined) {
             console.log('Err: move - (' + move.col + ', ' + move.row + ') has already been made');
-            return;
+            return false;
         }
 
         console.log('Making move');
-        game.grid[move.col][move.row] = game.id;
+        game.board[move.col][move.row] = socketId;
         game.host.emit('move:draw', move);
         game.opponent.emit('move:draw', move);
+        return true;
     }
 
 };

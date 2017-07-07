@@ -47,11 +47,25 @@ var Game = {
         game.host.emit('game:begin');
         game.opponent.emit('game:begin');
         game.host.on('move:make', function(move) {
-            Move.make(move, game);
+            Move.make(move, game, game.host.id) && Game.switchTurn(game);
         });
         game.opponent.on('move:make', function(move) {
-            Move.make(move, game);
+            Move.make(move, game, game.opponent.id) && Game.switchTurn(game);
         });
+        this.switchTurn(game);
+    },
+
+    switchTurn: function(game) {
+        // Assigns random player for first turn
+        if (game.turnPlayer === null) game.turnPlayer = Math.random() > .5 ? game.host : game.opponent;
+
+        var previousPlayer = game.turnPlayer;
+
+        // Switch players
+        game.turnPlayer = previousPlayer === game.host ? game.opponent : game.host;
+
+        previousPlayer.emit('game:turn', false);
+        game.turnPlayer.emit('game:turn', true);
     }
 
 };
@@ -61,7 +75,8 @@ function constructGame(socket) {
         id: KeyGen.generateId(),
         host: socket,
         opponent: null,
-        grid: [[], [], []]
+        turnPlayer: null,
+        board: Move.createBoard()
     };
 }
 

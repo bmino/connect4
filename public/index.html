@@ -21,8 +21,20 @@
         var socket = io();
 
         var gameState = {
-            status: 'CONNECTING'
+            status: 'CONNECTING',
+            myTurn: false
         };
+
+        socket.on('game:begin', function() {
+            setupBoard();
+            gameState.status = 'STARTING_GAME';
+        });
+
+        socket.on('game:turn', function(myTurn) {
+            gameState.myTurn = myTurn;
+            gameState.status = myTurn ? 'WAITING_FOR_MOVE' : 'WAITING_FOR_OPPONENT';
+            console.log(gameState.status);
+        });
 
         socket.on('game:host', function(game) {
             console.log('created new game id ' + game.id);
@@ -33,29 +45,31 @@
         socket.on('game:join', function(game) {
             console.log('joined existing game id ' + game.id);
             gameState.id = game.id;
-            gameState.status = 'MIGHT_BE_YOUR_MOVE';
+            gameState.status = 'JOINED_EXISTING_GAME';
         });
 
-        socket.on('game:begin', function() {
-            setupBoard();
         socket.on('game:forfeit', function() {
             console.log('Congrats! Your opponent left, therefore you win!');
             gameState.status = 'WINNER';
         });
 
-        socket.on('move:draw', function(move) {
-            bmDraw.mark(move.col, move.row);
-        });
 
         function setupBoard() {
+            console.log('Setting up board');
+
             canvas = document.getElementById('master-canvas');
             ctx = canvas.getContext('2d');
 
             /* Draws Board Grid */
             bmDraw.init(canvas, ctx, 3);
 
+            socket.on('move:draw', function(move) {
+                bmDraw.mark(move.col, move.row);
+            });
+
             canvas.addEventListener('click', canvasClick, false);
             function canvasClick(event) {
+                if (!gameState.myTurn) return;
                 var x = event.pageX - canvas.offsetLeft;
                 var y = event.pageY - canvas.offsetTop;
                 var pos = bmDraw.identifyGridFromMouse(x, y);
