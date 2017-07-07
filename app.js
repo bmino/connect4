@@ -23,7 +23,6 @@ io.sockets.on('connect', function(socket) {
 
     /* Tries to join existing game, then hosts game */
     var game = Game.findGame(socket);
-    console.log('Entered a game id: ' + game.id);
 
 
     socket.on('disconnect', function() {

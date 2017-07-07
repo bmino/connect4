@@ -1,5 +1,5 @@
 var bmDraw = {
-    debug: true,
+    debug: false,
     canvas: null,
     ctx: null,
 
@@ -66,9 +66,9 @@ var bmDraw = {
         var corner = this.getCorner(col, row);
         var width = this.grid.cols.width;
         var height = this.grid.rows.height;
-        //this.debugger('marking corner: (' + corner.x + ', ' + corner.y + ')');
-        //this.debugger('marking width: ' + width);
-        //this.debugger('marking height: ' + height);
+        this.debugger('marking corner: (' + corner.x + ', ' + corner.y + ')');
+        this.debugger('marking width: ' + width);
+        this.debugger('marking height: ' + height);
 
         this.ctx.fillStyle = '#EE0000';
         this.ctx.fillRect(corner.x, corner.y, width, height);
