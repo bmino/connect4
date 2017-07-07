@@ -22,6 +22,7 @@ var bmDraw = {
         this.ctx = ctx;
         this.grid.cols.border = border;
         this.grid.rows.border = border;
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawGrid(3, 3);
     },
 

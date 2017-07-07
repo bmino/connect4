@@ -27,8 +27,8 @@ io.sockets.on('connect', function(socket) {
 
 
     socket.on('disconnect', function() {
+        Game.forfeit(game, socket);
         delete SOCKET_LIST[socket.id];
-        // Notify games player was a part of
     });
 
 });

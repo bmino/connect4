@@ -12,8 +12,8 @@ var Game = {
     },
 
     joinGame: function(socket) {
-        for (var gameId in this.GAME_LIST) {
-            var game = this.GAME_LIST[gameId];
+        for (var g in this.GAME_LIST) {
+            var game = Game.GAME_LIST[g];
             if (game.opponent === null) {
                 // Can join this game
                 game.opponent = socket;
@@ -28,9 +28,19 @@ var Game = {
 
     createNewGame: function(socket) {
         var game = constructGame(socket);
-        this.GAME_LIST[game.id] = game;
+        this.GAME_LIST.push(game);
         socket.emit('game:host', {id: game.id});
         return game;
+    },
+
+    forfeit: function(game, socket) {
+        delete this.GAME_LIST[this.GAME_LIST.indexOf(game)];
+        if (game.host && socket.id === game.host.id) {
+            game.opponent && game.opponent.emit('game:forfeit');
+        }
+        if (game.opponent && socket.id === game.opponent.id) {
+            game.host && game.host.emit('game:forfeit');
+        }
     },
 
     beginGame: function(game) {

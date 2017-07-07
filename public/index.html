@@ -38,6 +38,9 @@
 
         socket.on('game:begin', function() {
             setupBoard();
+        socket.on('game:forfeit', function() {
+            console.log('Congrats! Your opponent left, therefore you win!');
+            gameState.status = 'WINNER';
         });
 
         socket.on('move:draw', function(move) {
