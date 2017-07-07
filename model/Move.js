@@ -1,3 +1,5 @@
+var KeyGen = require('./KeyGen.js');
+
 var Move = {
     make: function(move, game) {
 
@@ -22,7 +24,7 @@ var Move = {
 
 function constructMove() {
     return {
-        id: Math.random(),
+        id: KeyGen.generateId(),
         col: null,
         row: null
     };

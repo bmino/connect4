@@ -10,7 +10,7 @@ app.use(express.static('public'));
 server.listen(2000);
 
 var Game = require('./model/Game.js');
-
+var KeyGen = require('./model/KeyGen.js');
 
 var SOCKET_LIST = [];
 
@@ -18,7 +18,7 @@ var io = require('socket.io')(server, {});
 io.sockets.on('connect', function(socket) {
     console.log('New connection');
 
-    socket.id = Math.random();
+    socket.id = KeyGen.generateId();
     SOCKET_LIST[socket.id] = socket;
 
     /* Tries to join existing game, then hosts game */

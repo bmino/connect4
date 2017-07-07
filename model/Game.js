@@ -1,4 +1,5 @@
 var Move = require('./Move.js');
+var KeyGen = require('./KeyGen.js');
 
 var Game = {
 
@@ -47,7 +48,7 @@ var Game = {
 
 function constructGame(socket) {
     return {
-        id: Math.random(),
+        id: KeyGen.generateId(),
         host: socket,
         opponent: null,
         grid: [[], [], []]
