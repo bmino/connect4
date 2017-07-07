@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="style/canvas.css">
 </head>
 <body>
+    <!-- Status -->
+    <div id="game-status"></div>
+
     <!-- Canvas -->
     <canvas id="master-canvas" width="600" height="600"></canvas>
 
@@ -21,36 +24,36 @@
         var socket = io();
 
         var gameState = {
-            status: 'CONNECTING',
+            status: '',
             myTurn: false
         };
+        changeStatus('CONNECTING');
 
         socket.on('game:begin', function() {
             setupBoard();
-            gameState.status = 'STARTING_GAME';
+            changeStatus('STARTING_GAME');
         });
 
         socket.on('game:turn', function(myTurn) {
             gameState.myTurn = myTurn;
-            gameState.status = myTurn ? 'WAITING_FOR_MOVE' : 'WAITING_FOR_OPPONENT';
-            console.log(gameState.status);
+            changeStatus(myTurn ? 'YOUR_TURN' : 'OPPONENT_TURN');
         });
 
         socket.on('game:host', function(game) {
             console.log('created new game id ' + game.id);
             gameState.id = game.id;
-            gameState.status = 'SEARCHING_FOR_OPPONENT';
+            changeStatus('SEARCHING_FOR_OPPONENT');
         });
 
         socket.on('game:join', function(game) {
             console.log('joined existing game id ' + game.id);
             gameState.id = game.id;
-            gameState.status = 'JOINED_EXISTING_GAME';
+            changeStatus('JOINED_EXISTING_GAME');
         });
 
         socket.on('game:forfeit', function() {
             console.log('Congrats! Your opponent left, therefore you win!');
-            gameState.status = 'WINNER';
+            changeStatus('WINNER');
         });
 
 
@@ -82,6 +85,11 @@
                     row: pos.y
                 });
             }
+        }
+
+        function changeStatus(status) {
+            gameState.status = status;
+            document.getElementById('game-status').innerText = status;
         }
 
     </script>
