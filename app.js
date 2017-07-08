@@ -7,7 +7,7 @@ app.get('/', function(req, res) {
 });
 app.use(express.static('public'));
 
-server.listen(2000);
+server.listen(process.env.PORT || 2000);
 
 var Game = require('./model/Game.js');
 var KeyGen = require('./model/KeyGen.js');
