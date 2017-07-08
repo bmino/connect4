@@ -37,7 +37,7 @@ var Board = {
 
         for (y=0; y<board.length; y++) {
             adjacent.local = 0;
-            adjacent.previous = board[y][0];
+            adjacent.previous = board[0][y];
             for (x=0; x<board[y].length; x++) {
                 if (board[x][y] === adjacent.previous && board[x][y] === socket.id) adjacent.x = Math.max(++adjacent.local, adjacent.x);
                 else adjacent.local = 0;
