@@ -51,6 +51,16 @@
             changeStatus('JOINED_EXISTING_GAME');
         });
 
+        socket.on('game:win', function() {
+            console.log('Congrats! You win!');
+            changeStatus('WINNER');
+        });
+
+        socket.on('game:lose', function() {
+            console.log('Oh no, looks like you lost!');
+            changeStatus('LOSER');
+        });
+
         socket.on('game:forfeit', function() {
             console.log('Congrats! Your opponent left, therefore you win!');
             changeStatus('WINNER');
@@ -79,7 +89,7 @@
                 var x = event.pageX - canvas.offsetLeft;
                 var y = event.pageY - canvas.offsetTop;
                 var pos = bmDraw.identifyGridFromMouse(x, y);
-                socket.emit('move:make', {
+                socket.emit('board:move', {
                     game: gameState.id,
                     col: pos.x,
                     row: pos.y

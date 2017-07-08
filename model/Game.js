@@ -1,4 +1,4 @@
-var Move = require('./Move.js');
+var Board = require('./Board.js');
 var KeyGen = require('./KeyGen.js');
 
 var Game = {
@@ -33,24 +33,14 @@ var Game = {
         return game;
     },
 
-    forfeit: function(game, socket) {
-        delete this.GAME_LIST[this.GAME_LIST.indexOf(game)];
-        if (game.host && socket.id === game.host.id) {
-            game.opponent && game.opponent.emit('game:forfeit');
-        }
-        if (game.opponent && socket.id === game.opponent.id) {
-            game.host && game.host.emit('game:forfeit');
-        }
-    },
-
     beginGame: function(game) {
         game.host.emit('game:begin');
         game.opponent.emit('game:begin');
-        game.host.on('move:make', function(move) {
-            Move.make(move, game, game.host.id) && Game.switchTurn(game);
+        game.host.on('board:move', function(move) {
+            Board.move(move, game, game.host.id) && Game.switchTurn(game);
         });
-        game.opponent.on('move:make', function(move) {
-            Move.make(move, game, game.opponent.id) && Game.switchTurn(game);
+        game.opponent.on('board:move', function(move) {
+            Board.move(move, game, game.opponent.id) && Game.switchTurn(game);
         });
         this.switchTurn(game);
     },
@@ -59,14 +49,32 @@ var Game = {
         // Assigns random player for first turn
         if (game.turnPlayer === null) game.turnPlayer = Math.random() > .5 ? game.host : game.opponent;
 
-        var previousPlayer = game.turnPlayer;
+        if (this.isDone(game, game.turnPlayer)) return;
 
         // Switch players
+        var previousPlayer = game.turnPlayer;
         game.turnPlayer = previousPlayer === game.host ? game.opponent : game.host;
 
         previousPlayer.emit('game:turn', false);
         game.turnPlayer.emit('game:turn', true);
+    },
+
+    isDone: function(game, socket) {
+        var winner = Board.getWinner(game.board, socket);
+        if (winner) this.winner(game, winner);
+        return winner;
+    },
+
+    winner: function(game, winnerSocket) {
+        console.log('winner');
+        endGame(game, winnerSocket, 'game:win', 'game:lose');
+    },
+
+    forfeit: function(game, socket) {
+        console.log('forfeit');
+        endGame(game, socket, 'game:forfeit', 'game:forfeit');
     }
+
 
 };
 
@@ -76,8 +84,20 @@ function constructGame(socket) {
         host: socket,
         opponent: null,
         turnPlayer: null,
-        board: Move.createBoard()
+        board: Board.create()
     };
+}
+
+function endGame(game, socket, socketMsg, otherMsg) {
+    delete Game.GAME_LIST[Game.GAME_LIST.indexOf(game)];
+    if (game.host && socket.id === game.host.id) {
+        game.host.emit(socketMsg);
+        game.opponent && game.opponent.emit(otherMsg);
+    }
+    if (game.opponent && socket.id === game.opponent.id) {
+        game.opponent.emit(socketMsg);
+        game.host && game.host.emit(otherMsg);
+    }
 }
 
 module.exports = Game;
