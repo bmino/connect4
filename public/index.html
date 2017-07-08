@@ -90,7 +90,6 @@
                 var y = event.pageY - canvas.offsetTop;
                 var pos = bmDraw.identifyGridFromMouse(x, y);
                 socket.emit('board:move', {
-                    game: gameState.id,
                     col: pos.x,
                     row: pos.y
                 });

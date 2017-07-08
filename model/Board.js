@@ -57,11 +57,6 @@ var Board = {
             return false;
         }
 
-        if (game.id !== move.game) {
-            console.log('Err:move - somehow the move is for another game');
-            return false;
-        }
-
         if (game.turnPlayer.id !== socketId) {
             console.log('Err:move - players cannot move unless it is their turn');
             return;
