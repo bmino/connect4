@@ -78,10 +78,10 @@
             bmDraw.init(canvas, ctx, 3);
 
             socket.on('move:draw:native', function(move) {
-                bmDraw.mark(move.col, move.row, '#0000EE');
+                bmDraw.mark(move.col, move.row, 'X');
             });
             socket.on('move:draw:foreign', function(move) {
-                bmDraw.mark(move.col, move.row, '#EE0000');
+                bmDraw.mark(move.col, move.row, 'O');
             });
 
             canvas.addEventListener('click', canvasClick, false);

@@ -61,8 +61,9 @@ var bmDraw = {
         }
     },
 
-    mark: function(col, row, color) {
-        var originalColor = this.ctx.fillStyle;
+    mark: function(col, row, marker) {
+        var originalTextAlign = this.ctx.textAlign;
+        var originalTextBaseline = this.ctx.textBaseline;
         var corner = this.getCorner(col, row);
         var width = this.grid.cols.width;
         var height = this.grid.rows.height;
@@ -70,11 +71,16 @@ var bmDraw = {
         this.debugger('marking width: ' + width);
         this.debugger('marking height: ' + height);
 
-        this.ctx.fillStyle = color || '#EE0000';
-        this.ctx.fillRect(corner.x, corner.y, width, height);
-        this.ctx.fillStyle = originalColor;
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.font = '40px Arial';
 
-        this.grid.state[col][row] = 'X';
+        this.ctx.fillText(marker, corner.x + width/2, corner.y + height/2);
+
+        this.ctx.textAlign = originalTextAlign;
+        this.ctx.textBaseline = originalTextBaseline;
+
+        this.grid.state[col][row] = marker;
         this.debug && this.debugGrid();
     },
 
