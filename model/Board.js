@@ -16,14 +16,17 @@ var Board = {
 
     getWinner: function(board, socket) {
         var requiredAdjacent = 3;
-        var x,y;
+        var x,y, diag_x, diag_y;
         var adjacent = {
             local: 0,
             previous: null,
             x: 0,
-            y: 0
+            y: 0,
+            xy: 0,
+            yx: 0
         };
 
+        // X Dimension Win
         for (x=0; x<board.length; x++) {
             adjacent.local = 0;
             adjacent.previous = board[x][0];
@@ -35,6 +38,7 @@ var Board = {
             if (adjacent.y >= requiredAdjacent) return socket;
         }
 
+        // Y Dimension Win
         for (y=0; y<board.length; y++) {
             adjacent.local = 0;
             adjacent.previous = board[0][y];
@@ -44,6 +48,54 @@ var Board = {
                 adjacent.previous = board[x][y];
             }
             if (adjacent.x >= requiredAdjacent) return socket;
+        }
+
+        // From X wall
+        x=0;
+        for (y=0; y<board.length; y++) {
+            diag_x = x;
+            diag_y = y;
+            // Checking positive slope
+            while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
+                if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.xy = Math.max(++adjacent.local, adjacent.xy);
+                else adjacent.local = 0;
+                adjacent.previous = board[diag_x++][diag_y++];
+            }
+            if (adjacent.xy >= requiredAdjacent) return socket;
+
+            diag_x = x;
+            diag_y = y;
+            // Checking negative slope
+            while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
+                if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.xy = Math.max(++adjacent.local, adjacent.xy);
+                else adjacent.local = 0;
+                adjacent.previous = board[diag_x++][diag_y--];
+            }
+            if (adjacent.x >= requiredAdjacent) return socket;
+        }
+
+        // From Y wall
+        y=0;
+        for (x=0; x<board.length; x++) {
+            diag_x = x;
+            diag_y = y;
+            // Checking positive slope
+            while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
+                if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.xy = Math.max(++adjacent.local, adjacent.yx);
+                else adjacent.local = 0;
+                adjacent.previous = board[diag_x++][diag_y++];
+            }
+            if (adjacent.yx >= requiredAdjacent) return socket;
+
+            diag_x = x;
+            diag_y = y;
+            // Checking negative slope
+            while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
+                if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.yx = Math.max(++adjacent.local, adjacent.yx);
+                else adjacent.local = 0;
+                adjacent.previous = board[diag_x--][diag_y++];
+            }
+            if (adjacent.yx >= requiredAdjacent) return socket;
         }
 
         return null;
