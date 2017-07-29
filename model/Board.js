@@ -26,7 +26,7 @@ var Board = {
             yx: 0
         };
 
-        // X Dimension Win
+        // Y Dimension Win
         for (x=0; x<board.length; x++) {
             adjacent.local = 0;
             adjacent.previous = board[x][0];
@@ -38,7 +38,7 @@ var Board = {
             if (adjacent.y >= requiredAdjacent) return socket;
         }
 
-        // Y Dimension Win
+        // X Dimension Win
         for (y=0; y<board.length; y++) {
             adjacent.local = 0;
             adjacent.previous = board[0][y];
