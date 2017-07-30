@@ -1,0 +1,27 @@
+#chat-history {
+    width: 600px;
+
+    /* Centering */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-bottom: 10px;
+}
+
+#chat-form {
+    width: 600px;
+
+    /* Centering */
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+#chat-form input[type="text"] {
+    width: 90%;
+}
+
+#chat-form input[type="submit"] {
+    float: right;
+}

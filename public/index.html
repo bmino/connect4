@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="style/canvas.css">
+    <link rel="stylesheet" href="style/chat.css">
     <link rel="stylesheet" href="style/home.css">
 </head>
 <body>
@@ -13,13 +14,20 @@
     <!-- Canvas -->
     <canvas id="master-canvas" width="600" height="600"></canvas>
 
+    <!-- Chat -->
+    <textarea id="chat-history" disabled="disabled" rows="10"></textarea>
+    <form id="chat-form" action="http://bmino.com">
+        <input type="text" id="chat-msg" placeholder="Chat Message">
+        <input type="submit" value="Send" id="chat-send">
+    </form>
+
 
 
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/bmDraw.js"></script>
     <script type="text/javascript">
-        var canvas, ctx;
+        var canvas, ctx, chatHistory, chatForm, chatMsg, chatSend;
 
         /* Connect to socket.io */
         var socket = io();
@@ -32,6 +40,7 @@
 
         socket.on('game:begin', function() {
             setupBoard();
+            setupChat();
             changeStatus('STARTING_GAME');
         });
 
@@ -94,6 +103,35 @@
                     col: pos.x,
                     row: pos.y
                 });
+            }
+        }
+
+        function setupChat() {
+            console.log('Setting up chat');
+
+            chatHistory = document.getElementById('chat-history');
+            chatForm = document.getElementById('chat-form');
+            chatMsg = document.getElementById('chat-msg');
+            chatSend = document.getElementById('chat-send');
+
+            socket.on('chat:msg:native', function(chat) {
+                // TODO: add to chat
+                console.log(chat.speaker + ' said: ' + chat.msg);
+                chatHistory.value += chat.msg + "\n";
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            });
+            socket.on('chat:msg:foreign', function(chat) {
+                // TODO: add to chat
+                console.log(chat.speaker + ' said: ' + chat.msg);
+                chatHistory.value += chat.msg + "\n";
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            });
+
+            chatForm.addEventListener('submit', chatSubmit, false);
+            function chatSubmit(event) {
+                event.preventDefault();
+                socket.emit('chat:speak', chatMsg.value);
+                chatMsg.value = '';
             }
         }
 

@@ -1,4 +1,5 @@
 var Board = require('./Board.js');
+var Player = require('./Player.js');
 var KeyGen = require('./KeyGen.js');
 
 var Game = {
@@ -34,14 +35,25 @@ var Game = {
     },
 
     beginGame: function(game) {
-        game.host.emit('game:begin');
-        game.opponent.emit('game:begin');
+        // Active Board Commands
         game.host.on('board:move', function(move) {
             Board.move(move, game, game.host.id) && Game.switchTurn(game);
         });
         game.opponent.on('board:move', function(move) {
             Board.move(move, game, game.opponent.id) && Game.switchTurn(game);
         });
+
+        // Activate Chat Commands
+        game.host.on('chat:speak', function(msg) {
+            Player.chat(game.host, game.opponent, msg);
+        });
+        game.opponent.on('chat:speak', function(msg) {
+            Player.chat(game.opponent, game.host, msg);
+        });
+
+        game.host.emit('game:begin');
+        game.opponent.emit('game:begin');
+
         this.switchTurn(game);
     },
 
