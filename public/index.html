@@ -15,10 +15,9 @@
     <canvas id="master-canvas" width="600" height="600"></canvas>
 
     <!-- Chat -->
-    <textarea id="chat-history" disabled="disabled" rows="10"></textarea>
-    <form id="chat-form" action="http://bmino.com">
-        <input type="text" id="chat-msg" placeholder="Chat Message">
-        <input type="submit" value="Send" id="chat-send">
+    <textarea id="chat-history" disabled rows="10" style="display: none;"></textarea>
+    <form id="chat-form" style="display: none;">
+        <input type="text" id="chat-msg" placeholder="Chat Message" autocomplete="off">
     </form>
 
 
@@ -27,7 +26,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/bmDraw.js"></script>
     <script type="text/javascript">
-        var canvas, ctx, chatHistory, chatForm, chatMsg, chatSend;
+        var canvas, ctx, chatHistory, chatForm, chatMsg;
 
         /* Connect to socket.io */
         var socket = io();
@@ -112,7 +111,6 @@
             chatHistory = document.getElementById('chat-history');
             chatForm = document.getElementById('chat-form');
             chatMsg = document.getElementById('chat-msg');
-            chatSend = document.getElementById('chat-send');
 
             socket.on('chat:msg:native', function(chat) {
                 // TODO: add to chat
@@ -132,7 +130,12 @@
                 event.preventDefault();
                 socket.emit('chat:speak', chatMsg.value);
                 chatMsg.value = '';
+                return false;
             }
+
+            /* Display Chat HTML */
+            chatHistory.style.display = 'block';
+            chatForm.style.display = 'block';
         }
 
         function changeStatus(status) {

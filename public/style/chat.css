@@ -19,9 +19,5 @@
 }
 
 #chat-form input[type="text"] {
-    width: 90%;
-}
-
-#chat-form input[type="submit"] {
-    float: right;
+    width: 600px;
 }

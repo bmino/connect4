@@ -6,12 +6,7 @@ var Player = {
     PLAYER_LIST: [],
 
     create: function (socket, username) {
-        var player = {
-            id: KeyGen.generateId(),
-            socket: socket,
-            username: username
-        };
-        this.PLAYER_LIST.push(player);
+        socket.username = username;
     },
 
     chat: function (speaker, recipient, msg) {
@@ -21,13 +16,6 @@ var Player = {
 
         speaker.emit('chat:msg:native', chat);
         recipient.emit('chat:msg:foreign', chat);
-    },
-
-    delete: function (socket) {
-        for (var p in this.PLAYER_LIST) {
-            var player = Player.PLAYER_LIST[p];
-            if (player.socket.id === socket.id) delete Player.PLAYER_LIST[Player.PLAYER_LIST.indexOf(player)];
-        }
     }
 
 };
