@@ -5,7 +5,9 @@ var server = require('http').Server(app);
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
+
 app.use(express.static('public'));
+app.use('/npm/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 
 server.listen(process.env.PORT || 2000);
 

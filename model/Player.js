@@ -6,8 +6,13 @@ var Player = {
     PLAYER_LIST: [],
 
     create: function (socket, username) {
+        // Already logged in
+        if (this.PLAYER_LIST.indexOf(socket) !== -1) return;
+
         socket.username = username;
         this.PLAYER_LIST.push(socket);
+
+        socket.emit('player:login:success');
     },
 
     chat: function (speaker, recipient, msg) {
@@ -19,7 +24,7 @@ var Player = {
 
     login: function (socket) {
         return new Promise(function (resolve, reject) {
-            socket.on('player:login', function(username) {
+            socket.on('player:login:attempt', function(username) {
                 console.log('Login from: ' + username);
                 Player.create(socket, username);
                 resolve(username);

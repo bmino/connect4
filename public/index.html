@@ -7,29 +7,37 @@
     <link rel="stylesheet" href="style/canvas.css">
     <link rel="stylesheet" href="style/chat.css">
     <link rel="stylesheet" href="style/home.css">
+    <link rel="stylesheet" href="/npm/bootstrap/css/bootstrap.css">
 </head>
 <body>
-    <!-- Status -->
-    <div id="game-status"></div>
+    <div id="wrapper">
 
-    <!-- Log In -->
-    <form id="login-form">
-        <input type="text" id="login-name" placeholder="Username" autocomplete="off">
-    </form>
+        <!-- Status -->
+        <div id="game-status"></div>
 
-    <!-- Canvas -->
-    <canvas id="master-canvas" width="600" height="600"></canvas>
+        <!-- Log In -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-name">Username: </label>
+                <input type="text" id="login-name" class="form-control" placeholder="Username" autocomplete="off" autofocus>
+            </div>
+        </form>
 
-    <!-- Chat -->
-    <textarea id="chat-history" disabled rows="10"></textarea>
-    <form id="chat-form">
-        <input type="text" id="chat-msg" placeholder="Chat Message" autocomplete="off">
-    </form>
+        <!-- Canvas -->
+        <canvas id="master-canvas" width="800" height="800"></canvas>
+
+        <!-- Chat -->
+        <textarea id="chat-history" disabled rows="10"></textarea>
+        <form id="chat-form">
+            <input type="text" id="chat-msg" class="form-control" placeholder="Chat Message" autocomplete="off">
+        </form>
 
 
+    </div><!-- /#wrapper -->
 
     <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/npm/bootstrap/js/bootstrap.js"></script>
     <script src="js/bmDraw.js"></script>
     <script src="js/api.js"></script>
 </body>

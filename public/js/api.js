@@ -55,10 +55,14 @@ function setupLogin() {
     loginForm = document.getElementById('login-form');
     loginUsername = document.getElementById('login-name');
 
+    socket.on('player:login:success', function() {
+        loginForm.style.display = 'none';
+    });
+
     loginForm.addEventListener('submit', loginSubmit, false);
     function loginSubmit(event) {
         event.preventDefault();
-        socket.emit('player:login', loginUsername.value);
+        socket.emit('player:login:attempt', loginUsername.value);
         loginUsername.value = '';
         return false;
     }

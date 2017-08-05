@@ -1,7 +1,12 @@
-#game-status {
+#wrapper {
+    width: 800px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#game-status {
+    width: 100%;
+    display: inline-block;
     text-align: center;
-    width: 600px;
     font-size: 24px;
 }
