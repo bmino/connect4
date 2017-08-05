@@ -2,11 +2,13 @@
     border: 1px solid black;
 
     /* Centering */
-    display: block;
     margin-left: auto;
     margin-right: auto;
 
     margin-bottom: 15px;
+
+    /* Initially Hidden */
+    display: none;
 }
 
 #game-status {

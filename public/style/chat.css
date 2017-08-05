@@ -2,11 +2,13 @@
     width: 600px;
 
     /* Centering */
-    display: block;
     margin-left: auto;
     margin-right: auto;
 
     margin-bottom: 10px;
+
+    /* Initially Hide */
+    display: none;
 }
 
 #chat-form {
@@ -15,6 +17,9 @@
     /* Centering */
     margin-left: auto;
     margin-right: auto;
+
+    /* Initially Hide */
+    display: none;
 
 }
 

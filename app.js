@@ -9,8 +9,9 @@ app.use(express.static('public'));
 
 server.listen(process.env.PORT || 2000);
 
-var Game = require('./model/Game.js');
 var KeyGen = require('./model/KeyGen.js');
+var Game = require('./model/Game.js');
+var Player = require('./model/Player.js');
 
 var SOCKET_LIST = [];
 
@@ -20,13 +21,19 @@ io.sockets.on('connect', function(socket) {
 
     socket.id = KeyGen.generateId();
     SOCKET_LIST[socket.id] = socket;
+    var game;
 
-    /* Tries to join existing game, then hosts game */
-    var game = Game.findGame(socket);
+    /* Waits for Player login */
+    Player.login(socket)
+        .then(function(username) {
+            /* Tries to join existing game, then hosts game */
+            game = Game.findGame(socket);
+        });
 
 
     socket.on('disconnect', function() {
         Game.forfeit(game, socket);
+        Player.logout(socket);
         delete SOCKET_LIST[socket.id];
     });
 

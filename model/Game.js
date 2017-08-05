@@ -101,7 +101,13 @@ function constructGame(socket) {
 }
 
 function endGame(game, socket, socketMsg, otherMsg) {
-    delete Game.GAME_LIST[Game.GAME_LIST.indexOf(game)];
+    var gameIndex = Game.GAME_LIST.indexOf(game);
+
+    // Game has not begun
+    if (gameIndex === -1) return;
+
+    delete Game.GAME_LIST[gameIndex];
+
     if (game.host && socket.id === game.host.id) {
         game.host.emit(socketMsg);
         game.opponent && game.opponent.emit(otherMsg);
