@@ -7,6 +7,7 @@ app.get('/', function(req, res) {
 });
 
 app.use(express.static('public'));
+app.use('/npm/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/npm/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 
 server.listen(process.env.PORT || 2000);
