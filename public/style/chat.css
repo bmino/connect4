@@ -26,5 +26,5 @@
 }
 
 #chat-form input[type="text"] {
-    width: 800px;
+    width: 100%;
 }
