@@ -71,7 +71,10 @@ function setupLogin() {
 function setupBoard() {
     console.log('Setting up board');
 
+    var wrapperWidth = document.getElementById('wrapper').clientWidth;
+
     canvas = document.getElementById('master-canvas');
+    canvas.width = canvas.height = Math.min(window.innerWidth, wrapperWidth);
     ctx = canvas.getContext('2d');
 
     /* Display Board */
