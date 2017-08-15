@@ -1,4 +1,8 @@
-var canvas, ctx, loginForm, loginUsername, chatHistory, chatForm, chatMsg;
+var canvas, ctx, loginForm, loginUsername, logoutBtn, chatHistory, chatForm, chatMsg;
+
+var debug = {
+    auto_login: false
+};
 
 /* Connect to socket.io */
 var socket = io();
@@ -54,9 +58,12 @@ function setupLogin() {
 
     loginForm = document.getElementById('login-form');
     loginUsername = document.getElementById('login-name');
+    logoutBtn = document.getElementById('logout');
 
-    socket.on('player:login:success', function() {
+    socket.on('player:login:success', function(username) {
+        logoutBtn.innerHTML = 'User: ' + username;
         loginForm.style.display = 'none';
+        logoutBtn.style.display = 'initial';
     });
 
     loginForm.addEventListener('submit', loginSubmit, false);
@@ -64,17 +71,32 @@ function setupLogin() {
         event.preventDefault();
         socket.emit('player:login:attempt', loginUsername.value);
         loginUsername.value = '';
-        return false;
     }
+
+    logoutBtn.addEventListener('click', logoutSubmit, false);
+    function logoutSubmit(event) {
+        event.preventDefault();
+        socket.emit('player:logout');
+        loginForm.style.display = 'initial';
+        logoutBtn.style.display = 'none';
+    }
+
+    if (debug.auto_login) socket.emit('player:login:attempt', 'Auto Login ' + randomInt(1, 99));
+}
+
+function randomInt(min, max) {
+    return Math.random() * (max - min) + min;
 }
 
 function setupBoard() {
     console.log('Setting up board');
 
     var wrapperWidth = document.getElementById('wrapper').clientWidth;
+    var availableSpace = Math.min(window.innerWidth, wrapperWidth);
+    var MAX_DIMENSION = 1000;
 
     canvas = document.getElementById('master-canvas');
-    canvas.width = canvas.height = Math.min(window.innerWidth, wrapperWidth);
+    canvas.width = canvas.height = Math.min(availableSpace, MAX_DIMENSION);
     ctx = canvas.getContext('2d');
 
     /* Display Board */

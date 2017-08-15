@@ -5,14 +5,19 @@ var Player = {
 
     PLAYER_LIST: [],
 
-    create: function (socket, username) {
+    login: function (socket, username) {
         // Already logged in
         if (this.PLAYER_LIST.indexOf(socket) !== -1) return;
 
         socket.username = username;
         this.PLAYER_LIST.push(socket);
 
-        socket.emit('player:login:success');
+        socket.on('player:logout', function() {
+            Player.logout(socket);
+        });
+
+        console.log('Login from: ' + username);
+        socket.emit('player:login:success', username);
     },
 
     chat: function (speaker, recipient, msg) {
@@ -22,11 +27,10 @@ var Player = {
         recipient.emit('chat:msg:foreign', chat);
     },
 
-    login: function (socket) {
+    waitForLogin: function (socket) {
         return new Promise(function (resolve, reject) {
             socket.on('player:login:attempt', function(username) {
-                console.log('Login from: ' + username);
-                Player.create(socket, username);
+                Player.login(socket, username);
                 resolve(username);
             });
         });

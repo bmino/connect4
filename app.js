@@ -27,7 +27,7 @@ io.sockets.on('connect', function(socket) {
     var game;
 
     /* Waits for Player login */
-    Player.login(socket)
+    Player.waitForLogin(socket)
         .then(function(username) {
             /* Tries to join existing game, then hosts game */
             game = Game.findGame(socket);

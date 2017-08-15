@@ -5,3 +5,12 @@
 
     width: 100%;
 }
+
+#logout {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    /* Defaults to Hidden */
+    display: none;
+}
