@@ -115,6 +115,7 @@ function setupBoard() {
     canvas.addEventListener('click', canvasClick, false);
     function canvasClick(event) {
         if (!gameState.myTurn) return;
+        changeStatus('SUBMITTING_MOVE');
         var x = event.pageX - canvas.offsetLeft;
         var y = event.pageY - canvas.offsetTop;
         var pos = bmDraw.identifyGridFromMouse(x, y);
