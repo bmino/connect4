@@ -35,7 +35,10 @@ var Board = {
                 else adjacent.local = 0;
                 adjacent.previous = board[x][y];
             }
-            if (adjacent.y >= requiredAdjacent) return socket;
+            if (adjacent.y >= requiredAdjacent) {
+                console.log('Y dimension win');
+                return socket;
+            }
         }
 
         // X Dimension Win
@@ -47,7 +50,10 @@ var Board = {
                 else adjacent.local = 0;
                 adjacent.previous = board[x][y];
             }
-            if (adjacent.x >= requiredAdjacent) return socket;
+            if (adjacent.x >= requiredAdjacent) {
+                console.log('X dimension win');
+                return socket;
+            }
         }
 
         // From X wall
@@ -55,23 +61,31 @@ var Board = {
         for (y=0; y<board.length; y++) {
             diag_x = x;
             diag_y = y;
+            adjacent.previous = null;
             // Checking positive slope
             while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
                 if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.xy = Math.max(++adjacent.local, adjacent.xy);
                 else adjacent.local = 0;
                 adjacent.previous = board[diag_x++][diag_y++];
             }
-            if (adjacent.xy >= requiredAdjacent) return socket;
+            if (adjacent.xy >= requiredAdjacent) {
+                console.log('X wall positive slope win');
+                return socket;
+            }
 
             diag_x = x;
             diag_y = y;
+            adjacent.previous = null;
             // Checking negative slope
             while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
                 if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.xy = Math.max(++adjacent.local, adjacent.xy);
                 else adjacent.local = 0;
                 adjacent.previous = board[diag_x++][diag_y--];
             }
-            if (adjacent.x >= requiredAdjacent) return socket;
+            if (adjacent.x >= requiredAdjacent) {
+                console.log('X wall negative slope win');
+                return socket;
+            }
         }
 
         // From Y wall
@@ -79,25 +93,43 @@ var Board = {
         for (x=0; x<board.length; x++) {
             diag_x = x;
             diag_y = y;
+            adjacent.previous = null;
             // Checking positive slope
             while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
                 if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.xy = Math.max(++adjacent.local, adjacent.yx);
                 else adjacent.local = 0;
                 adjacent.previous = board[diag_x++][diag_y++];
             }
-            if (adjacent.yx >= requiredAdjacent) return socket;
+            if (adjacent.yx >= requiredAdjacent) {
+                console.log('Y wall positive slope win');
+                return socket;
+            }
 
             diag_x = x;
             diag_y = y;
+            adjacent.previous = null;
             // Checking negative slope
             while (diag_x < board.length && diag_y < board.length && diag_x >= 0 && diag_y >= 0) {
                 if (board[diag_x][diag_y] === adjacent.previous && board[diag_x][diag_y] === socket.id) adjacent.yx = Math.max(++adjacent.local, adjacent.yx);
                 else adjacent.local = 0;
                 adjacent.previous = board[diag_x--][diag_y++];
             }
-            if (adjacent.yx >= requiredAdjacent) return socket;
+            if (adjacent.yx >= requiredAdjacent) {
+                console.log('Y wall negative slope win');
+                return socket;
+            }
         }
 
+        // Draw
+        for (x=0; x<board.length; x++) {
+            if (board[x].indexOf(undefined) !== -1) {
+                // Found at least one free space
+                return null;
+            }
+        }
+
+        // Detected a full board ie. a draw
+        console.log('Draw detected');
         return null;
 
     },
