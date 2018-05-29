@@ -1,7 +1,7 @@
 {
-  "name": "connect4",
+  "name": "tic-tac-toe",
   "version": "1.0.0",
-  "description": "",
+  "description": "Play tic-tac-toe online with your friends",
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^3.3.7",
-    "express": "^4.15.3",
+    "express": "^4.16.3",
     "jquery": "^3.2.1",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.1.1"
   }
 }
