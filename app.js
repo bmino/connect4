@@ -1,11 +1,14 @@
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
+var path = require('path');
+var favicon = require('serve-favicon');
 
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/public/index.html');
 });
 
+app.use(favicon(path.join(__dirname, 'public/image', 'favicon.ico')));
 app.use(express.static('public'));
 app.use('/npm/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/npm/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
