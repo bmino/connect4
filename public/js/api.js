@@ -5,7 +5,7 @@ var debug = {
 };
 
 /* Connect to socket.io */
-var socket = io();
+var socket = io('/', {path: window.location.pathname + 'socket.io'}).connect();
 
 var gameState = {
     status: '',
