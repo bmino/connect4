@@ -17,9 +17,10 @@ var bmDraw = {
         state: []
     },
 
-    init: function (canvas, ctx, border) {
+    init: function (canvas, border) {
+        canvas.style.display = 'block';
         this.canvas = canvas;
-        this.ctx = ctx;
+        this.ctx = canvas.getContext('2d');
         this.grid.cols.border = border;
         this.grid.rows.border = border;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -49,14 +50,14 @@ var bmDraw = {
         var x = 0;
         for (var i=0; i<cols-1; i++) {
             x += this.grid.cols.width;
-            ctx.fillRect(x, 0, this.grid.cols.border, height);
+            this.ctx.fillRect(x, 0, this.grid.cols.border, height);
             x += this.grid.cols.border;
         }
 
         var y = 0;
         for (var j=0; j<rows-1; j++) {
             y += this.grid.rows.height;
-            ctx.fillRect(0, y, width, this.grid.rows.border);
+            this.ctx.fillRect(0, y, width, this.grid.rows.border);
             y += this.grid.rows.border;
         }
     },

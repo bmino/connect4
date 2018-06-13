@@ -1,4 +1,4 @@
-var canvas, ctx, loginForm, loginUsername, logoutBtn, chatHistory, chatForm, chatMsg;
+var canvas, loginForm, loginUsername, logoutBtn, chatHistory, chatForm, chatMsg;
 
 var debug = {
     auto_login: false
@@ -93,17 +93,14 @@ function setupBoard() {
 
     var wrapperWidth = document.getElementById('wrapper').clientWidth;
     var availableSpace = Math.min(window.innerWidth, wrapperWidth);
-    var MAX_DIMENSION = 1000;
+    var BORDER_WIDTH = 3;
+    var MAX_DIMENSION = 300 + (BORDER_WIDTH * 2);
 
     canvas = document.getElementById('master-canvas');
     canvas.width = canvas.height = Math.min(availableSpace, MAX_DIMENSION);
-    ctx = canvas.getContext('2d');
-
-    /* Display Board */
-    canvas.style.display = 'block';
 
     /* Draws Board Grid */
-    bmDraw.init(canvas, ctx, 3);
+    bmDraw.init(canvas, BORDER_WIDTH);
 
     socket.on('move:draw:native', function(move) {
         bmDraw.mark(move.col, move.row, 'X');
